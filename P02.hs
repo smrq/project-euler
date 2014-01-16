@@ -9,5 +9,5 @@ main = print result
 --          rFib n = fib (n-2) + fib (n-1)
 --fibs = map fib [0..]
 
-fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
+fibs = 1 : 1 : zipWith (+) fibs (tail fibs)
 result = sum (filter even (takeWhile (< 4000000) fibs))
