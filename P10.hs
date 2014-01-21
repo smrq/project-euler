@@ -1,24 +1,32 @@
 module P10 where
 main = print result
 
--- http://www.cs.hmc.edu/~oneill/papers/Sieve-JFP.pdf
+primes :: [Int]
+primes = [2,3,5] ++ (diffSorted [7,9..] oddComposites)
 
-primes = 2:([3..] `minus` composites) where composites = union [multiples p | p <- primes]
+oddComposites :: [Int]
+oddComposites = mergeAllSorted $ map multiples $ tail primes
+	where multiples p = [n*p | n <- [p,p+2..]]
 
-multiples n = map (n*) [n..]
+-- Removes all elements in the second infinite sorted list from the first
+diffSorted :: (Ord a) => [a] -> [a] -> [a]
+diffSorted xs@(x:xt) ys@(y:yt) =
+	case compare x y of
+		LT -> x:(diffSorted xt ys)
+		EQ -> diffSorted xt yt
+		GT -> diffSorted xs yt
 
-(x:xs) `minus` (y:ys)
-    | x < y = x:(xs `minus` (y:ys))
-    | x == y = xs `minus` ys
-    | x > y = (x:xs) `minus` ys
+-- Merges two infinite sorted lists
+mergeSorted :: (Ord a) => [a] -> [a] -> [a]
+mergeSorted xs@(x:xt) ys@(y:yt) =
+	case compare x y of
+		LT -> x:(mergeSorted xt ys)
+		EQ -> x:(mergeSorted xt yt)
+		GT -> y:(mergeSorted xs yt)
 
-union = foldr merge []
-    where
-        merge (x:xs) ys = x:merge' xs ys
-        merge' (x:xs) (y:ys)
-            | x < y  = x:merge' xs (y:ys)
-            | x == y = x:merge' xs ys
-            | x > y  = y:merge' (x:xs) ys
+mergeAllSorted :: (Ord a) => [[a]] -> [a]
+mergeAllSorted lists = foldr1 f lists
+	where f (x:xt) ys = x:(mergeSorted xt ys)
 
 primesBelowTwoMillion = takeWhile (< 2000000) primes
 result = sum primesBelowTwoMillion
