@@ -8,16 +8,20 @@ oddComposites :: [Int]
 oddComposites = mergeAllSorted $ map multiples $ tail primes
 	where multiples p = [n*p | n <- [p,p+2..]]
 
--- Removes all elements in the second infinite sorted list from the first
+-- Removes all elements in the second (potentially infinite) sorted list from the first
 diffSorted :: (Ord a) => [a] -> [a] -> [a]
+diffSorted [] ys = []
+diffSorted xs [] = xs
 diffSorted xs@(x:xt) ys@(y:yt) =
 	case compare x y of
 		LT -> x:(diffSorted xt ys)
 		EQ -> diffSorted xt yt
 		GT -> diffSorted xs yt
 
--- Merges two infinite sorted lists
+-- Merges two (potentially infinite) sorted lists
 mergeSorted :: (Ord a) => [a] -> [a] -> [a]
+mergeSorted [] ys = ys
+mergeSorted xs [] = xs
 mergeSorted xs@(x:xt) ys@(y:yt) =
 	case compare x y of
 		LT -> x:(mergeSorted xt ys)

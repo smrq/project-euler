@@ -6,7 +6,7 @@ import Data.Array.ST
 import Data.Array.Unboxed
 import Control.Monad
 import Control.Monad.ST
--- main = print result
+main = print result
 
 bound = 100000
 isPrimeArray :: UArray Int Bool
