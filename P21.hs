@@ -2,11 +2,6 @@ module P21 where
 import Data.List
 main = print result
 
---divisors x
---	| x <= 10000 = (map divisors' [0..10000] !! x)
---	| otherwise  = divisors' x
---		where divisors' x = [d | d <- [1..x-1], x `mod` d == 0]
-
 divisors :: Int -> [Int]
 divisors x = (properDivisors x) ++ [x]
 
