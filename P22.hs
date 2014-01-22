@@ -9,8 +9,8 @@ main = do
 removeQuotes :: T.Text -> T.Text
 removeQuotes str = T.dropAround (== '"') str
 
-parseNames :: String -> [String]
-parseNames names = map (T.unpack . removeQuotes) $ T.splitOn (T.pack ",") (T.pack names)
+parse :: String -> [String]
+parse names = map (T.unpack . removeQuotes) $ T.splitOn (T.pack ",") (T.pack names)
 
 scoreLetter :: Char -> Int
 scoreLetter letter = ord (toUpper letter) - ord 'A' + 1
@@ -22,4 +22,4 @@ scoreName :: String -> Int -> Int
 scoreName name index = index * (scoreLetters name)
 
 scoreNames :: String -> Int
-scoreNames names = sum $ zipWith scoreName (sort $ parseNames names) [1..]
+scoreNames names = sum $ zipWith scoreName (sort $ parse names) [1..]
