@@ -4,6 +4,7 @@ import Data.Char
 import Data.List
 main = print result
 
+isPandigitalProduct :: [Int] -> Int -> Bool
 isPandigitalProduct range n
 	| not $ areDigitsUniqueIn range $ show n = False
 	| otherwise = not $ null d'''
@@ -19,10 +20,10 @@ isPandigitalProduct range n
 			nWithBothDivisors :: Int -> String
 			nWithBothDivisors divisor = (show n) ++ (show divisor) ++ (show (n `div` divisor))
 
-			areDigitsUniqueIn :: [Int] -> [Char] -> Bool
-			areDigitsUniqueIn digits n = (n == nub n) && (null $ n \\ (map intToDigit digits))
+areDigitsUniqueIn :: [Int] -> [Char] -> Bool
+areDigitsUniqueIn digits n = (n == nub n) && (null $ n \\ (map intToDigit digits))
 
-			areDigitsCompleteIn :: [Int] -> [Char] -> Bool
-			areDigitsCompleteIn digits n = sort n == sort (map intToDigit digits)
+areDigitsCompleteIn :: [Int] -> [Char] -> Bool
+areDigitsCompleteIn digits n = sort n == sort (map intToDigit digits)
 
 result = sum $ filter (isPandigitalProduct [1..9]) [1..10000]
