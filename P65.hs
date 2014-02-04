@@ -1,20 +1,30 @@
 module P65 where
 import Data.Char (digitToInt)
-import Data.Ratio (numerator, (%))
+import Data.Ratio (numerator, denominator, (%))
 
-eSeq :: Int -> Int
-eSeq 1 = 2
-eSeq n
-	| n `mod` 3 == 0 = 2 * (n `div` 3)
-	| otherwise      = 1
+convergent :: [Integer] -> Int -> Rational
+convergent seq = f
+	where
+		f = (map convergent' [0..] !!)
+		a0 = seq !! 0
+		a1 = seq !! 1
+		convergent' 0 = a0 % 1
+		convergent' 1 = (a1*a0 + 1) % a1
+		convergent' n =
+			let
+				an = seq !! n
+				cn_1 = f $ n-1
+				cn_2 = f $ n-2
+				nn_1 = numerator cn_1
+				nn_2 = numerator cn_2
+				dn_1 = denominator cn_1
+				dn_2 = denominator cn_2
+			in (an * nn_1 + nn_2) % (an * dn_1 + dn_2)
 
-eExpansion :: Int -> Rational
-eExpansion n = eExpansion' n 0 where
-	eExpansion' :: Int -> Rational -> Rational
-	eExpansion' 1 acc = 2 + acc
-	eExpansion' n acc = eExpansion' (n-1) (1 / ((fromIntegral (eSeq n)) + acc))
+eTerms :: [Integer]
+eTerms = 2 : (foldr1 (++) $ map (\k -> [1,2*k,1]) [1..])
 
-expansionSum :: Int -> Int
-expansionSum = sum . (map digitToInt) . show . numerator . eExpansion
+eConvergent :: Int -> Rational
+eConvergent = convergent eTerms
 
-result = expansionSum 100
+result = sum $ map digitToInt $ show $ numerator $ eConvergent 99

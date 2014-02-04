@@ -4,13 +4,14 @@ import Data.List ((\\))
 
 squares :: (Integral int) => [int]
 squares = map (^2) [1..]
+
+nonSquares :: (Integral int) => [int]
 nonSquares = diffSorted [1..] squares
 
 -- http://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Continued_fraction_expansion
-sqrtFractionExpansion :: Int -> [Int]
+sqrtFractionExpansion :: (Integral int) => int -> [int]
 sqrtFractionExpansion n = loop 0 1 (floor $ sqrt $ fromIntegral n)
 	where
-		loop :: Int -> Int -> Int -> [Int]
 		loop m d a = loop' m d a a
 		loop' m d a a0 = a:(if a == 2*a0 then [] else loop' m' d' a' a0)
 			where
