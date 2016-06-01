@@ -1,6 +1,6 @@
 #lang racket
 (require csv-reading)
-(require racket/trace)
+(require "matrix.rkt")
 
 (define raw-data
   (let ([result null])
@@ -14,16 +14,8 @@
                      raw-data)))
 (define matrix-size (vector-length matrix))
 
-(define (matrix-set! matrix row col value)
-  (vector-set! (vector-ref matrix row) col value))
-
-(define (matrix-ref matrix row col)
-  (vector-ref (vector-ref matrix row) col))
-
-(define cost-matrix
-  (build-vector matrix-size (lambda (_) (make-vector matrix-size +inf.0))))
-(define visited-matrix
-  (build-vector matrix-size (lambda (_) (make-vector matrix-size #f))))
+(define cost-matrix (make-matrix matrix-size matrix-size +inf.0))
+(define visited-matrix (make-matrix matrix-size matrix-size #f))
 (define end-cost +inf.0)
 
 ; https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
