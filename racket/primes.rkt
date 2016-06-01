@@ -28,7 +28,7 @@
 
 (define (make-totient-sieve limit)
   (let ([is-prime-vector (make-bit-vector (add1 limit) #t)]
-        [totient-vector (make-vector-by-index (add1 limit) (lambda (n) n))])
+        [totient-vector (build-vector (add1 limit) (lambda (n) n))])
     (bit-vector-set! is-prime-vector 0 #f)
     (bit-vector-set! is-prime-vector 1 #f)
 
@@ -41,7 +41,7 @@
     totient-vector))
 
 (define (make-factor-sieve limit)
-  (let ([factor-vector (make-vector-by-index (add1 limit) (lambda (n) (cons n null)))])
+  (let ([factor-vector (build-vector (add1 limit) (lambda (n) (cons n null)))])
     (for* ([prime (in-range 2 limit)]
            #:when (= 1 (length (vector-ref factor-vector prime)))
            [n (in-range (* 2 prime) (add1 limit) prime)])
@@ -50,7 +50,7 @@
 
 ; Super slow!
 (define (make-coprime-sieve limit)
-  (let ([coprime-vector (make-vector-by-index (add1 limit) (lambda (n) (make-bit-vector n #f)))])
+  (let ([coprime-vector (build-vector (add1 limit) (lambda (n) (make-bit-vector n #f)))])
     (for ([prime (in-range 2 limit)]
           #:when (bit-vector-none? (vector-ref coprime-vector prime)))
       (for* ([n (in-range (* 2 prime) (add1 limit) prime)]
