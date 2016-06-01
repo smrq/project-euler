@@ -3,9 +3,11 @@
 (require "vectors.rkt")
 
 (provide primes-up-to)
+(provide make-bool-sieve)
 (provide make-factor-sieve)
 (provide make-totient-sieve)
 (provide make-coprime-sieve)
+(provide sieve-prime?)
 (provide sieve-coprime?)
 
 (define (primes-up-to limit)
@@ -61,6 +63,9 @@
                    #:unless (bit-vector-ref v i))
           i))
       coprime-vector)))
+
+(define (sieve-prime? sieve n)
+  (bit-vector-ref sieve n))
 
 ; Super slow!
 (define (sieve-coprime? sieve m n)
