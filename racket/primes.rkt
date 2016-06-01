@@ -6,6 +6,7 @@
 (provide make-factor-sieve)
 (provide make-totient-sieve)
 (provide make-coprime-sieve)
+(provide sieve-coprime?)
 
 (define (primes-up-to limit)
   (let ([is-prime-vector (make-bool-sieve limit)])
@@ -45,6 +46,7 @@
       (vector-set! factor-vector n (cons prime (vector-ref factor-vector n))))
     factor-vector))
 
+; Super slow!
 (define (make-coprime-sieve limit)
   (let ([coprime-vector (make-vector-by-index (add1 limit) (lambda (n) (make-bit-vector n #f)))])
     (for ([prime (in-range 2 limit)]
@@ -59,3 +61,9 @@
                    #:unless (bit-vector-ref v i))
           i))
       coprime-vector)))
+
+; Super slow!
+(define (sieve-coprime? sieve m n)
+  (if (> n m)
+      (sieve-coprime? sieve n m)
+      (ormap (lambda (x) (= n x)) (vector-ref sieve m))))
