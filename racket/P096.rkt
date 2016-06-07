@@ -94,7 +94,7 @@
     puzzle))
 
 (define puzzles
-  (call-with-input-file "P96_sudoku.txt"
+  (call-with-input-file "P096_sudoku.txt"
     (lambda (in)
       (let loop-puzzle ([puzzles null])
         (if (eof-object? (peek-string 1 0 in))

@@ -55,7 +55,7 @@
   (- (string-length str)
      (string-length (generate-roman (parse-roman str)))))
 
-(call-with-input-file "P89_roman.txt"
+(call-with-input-file "P089_roman.txt"
   (lambda (in)
     (let loop ([acc 0])
       (let ([line (read-line in)])

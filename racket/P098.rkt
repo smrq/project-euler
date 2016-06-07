@@ -2,7 +2,7 @@
 (require "digits.rkt")
 
 (define word-vector
-  (call-with-input-file "P98_words.txt"
+  (call-with-input-file "P098_words.txt"
     (lambda (in)
       (list->vector
         (map (lambda (word)

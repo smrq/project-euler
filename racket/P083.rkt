@@ -4,7 +4,7 @@
 
 (define raw-data
   (let ([result null])
-    (define in (open-input-file "P83_matrix.txt"))
+    (define in (open-input-file "P083_matrix.txt"))
     (set! result (csv->list in))
     (close-input-port in)
     result))

@@ -18,7 +18,7 @@
         (map string->number
              (string-split str ",")))))
 
-(call-with-input-file "P99_base_exp.txt"
+(call-with-input-file "P099_base_exp.txt"
   (lambda (in)
     (let loop ([biggest-pair (parse-line in)] [biggest-line-num 1] [line-num 2])
       (let ([pair (parse-line in)])
