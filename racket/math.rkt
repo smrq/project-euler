@@ -8,8 +8,11 @@
 (provide mod+)
 (provide mod-)
 (provide catalan)
+(provide divides?)
 (provide power-of-two?)
+(provide perfect-square?)
 (provide fibonacci)
+(provide divisors)
 
 (define (square n) (* n n))
 (define (cube n) (* n n n))
@@ -38,6 +41,9 @@
 (define (catalan n)
   (/ (choose (* 2 n) n) (add1 n)))
 
+(define (divides? m n)
+  (zero? (modulo m n)))
+
 (define power-of-two?
   (let* ([biggest 1]
          [results (mutable-set)]
@@ -50,6 +56,9 @@
           (add-next-power)
           (loop)))
       (set-member? results n))))
+
+(define (perfect-square? n)
+  (exact? (sqrt n)))
 
 (define fibonacci
   (let ([results (make-hash)])
@@ -75,3 +84,8 @@
                      [else (+ (fibonacci (- n 1))
                               (fibonacci (- n 2)))])))
       (hash-ref results n))))
+
+(define-memoized (divisors n)
+  (for/list ([i (in-range 1 (add1 n))]
+             #:when (divides? n i))
+    i))
