@@ -13,6 +13,7 @@
 (provide perfect-square?)
 (provide fibonacci)
 (provide divisors)
+(provide simplex-number)
 
 (define (square n) (* n n))
 (define (cube n) (* n n n))
@@ -89,3 +90,12 @@
   (for/list ([i (in-range 1 (add1 n))]
              #:when (divides? n i))
     i))
+
+; dimension = 1 -> linear numbers
+; dimension = 2 -> triangle numbers
+; dimension = 3 -> tetrahedral numbers
+; ...
+(define (simplex-number n dimension)
+  ; n+d-1 choose d
+  (/ (for/product ([i (in-range dimension)]) (+ n i))
+     (factorial dimension)))
