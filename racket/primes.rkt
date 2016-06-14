@@ -90,6 +90,7 @@
 (provide is-potential-prime?)
 (define (is-potential-prime? n)
   (cond
+    [(= n 1) #f]
     [(or (= n 2) (= n 3) (= n 5) (= n 7) (= n 11) (= n 13) (= n 17)) #t]
     [else (let ([wheel-mod (modulo n (prime-wheel-period wheel))])
             (set-member? (prime-wheel-spokes wheel) wheel-mod))]))
@@ -97,6 +98,7 @@
 (provide is-prime?)
 (define (is-prime? n)
   (cond
+    [(= n 1) #f]
     [(or (= n 2) (= n 3) (= n 5) (= n 7) (= n 11) (= n 13) (= n 17)) #t]
     [else (and (is-potential-prime? n)
                (let ([sqrt-n (sqrt n)])
