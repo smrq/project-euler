@@ -38,11 +38,12 @@
 
 (provide make-factor-sieve)
 (define (make-factor-sieve limit)
-  (let ([factor-vector (build-vector (add1 limit) (lambda (n) (cons n null)))])
+  (let ([factor-vector (build-vector (add1 limit) (lambda (n) null))])
     (for* ([prime (in-range 2 limit)]
-           #:when (= 1 (length (vector-ref factor-vector prime)))
-           [n (in-range (* 2 prime) (add1 limit) prime)])
-      (vector-set! factor-vector n (cons prime (vector-ref factor-vector n))))
+           #:when (null? (vector-ref factor-vector prime)))
+      (vector-set! factor-vector prime (cons prime null))
+      (for ([n (in-range (* 2 prime) (add1 limit) prime)])
+        (vector-set! factor-vector n (cons prime (vector-ref factor-vector n)))))
     factor-vector))
 
 ; Super slow!
