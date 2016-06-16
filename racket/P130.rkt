@@ -1,21 +1,9 @@
 #lang racket
 (require "primes.rkt")
-
-(define (A n)
-  (let* ([D9 (cond
-               [(= (modulo n 10) 1) (* 9 n)]
-               [(= (modulo n 10) 3) (* 3 n)]
-               [(= (modulo n 10) 7) (* 7 n)]
-               [(= (modulo n 10) 9) n]
-               [else (error "n must be coprime to 10")])]
-         [m (/ (add1 D9) 10)])
-    (let loop ([k 1] [q 1])
-      (if (zero? (modulo q n))
-          k
-          (loop (add1 k) (modulo (+ (* q m) 1) n))))))
+(require "repunit.rkt")
 
 (define (has-prime-property? n)
-  (zero? (modulo (sub1 n) (A n))))
+  (rep-unit-divides? (sub1 n) n))
 
 (define (next n)
   (cond [(= (modulo n 10) 1) (+ n 2)]
