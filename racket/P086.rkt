@@ -1,38 +1,5 @@
 #lang racket
-
-; https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples
-(define (next-triple-a triple)
-  (let ([x (first triple)] [y (second triple)] [z (third triple)])
-    (sort
-      (list
-        (+ (* x 1) (* y -2) (* z 2))
-        (+ (* x 2) (* y -1) (* z 2))
-        (+ (* x 2) (* y -2) (* z 3)))
-      <)))
-(define (next-triple-b triple)
-  (let ([x (first triple)] [y (second triple)] [z (third triple)])
-    (sort
-      (list
-        (+ (* x 1) (* y 2) (* z 2))
-        (+ (* x 2) (* y 1) (* z 2))
-        (+ (* x 2) (* y 2) (* z 3)))
-      <)))
-(define (next-triple-c triple)
-  (let ([x (first triple)] [y (second triple)] [z (third triple)])
-    (sort
-      (list
-        (+ (* x -1) (* y 2) (* z 2))
-        (+ (* x -2) (* y 1) (* z 2))
-        (+ (* x -2) (* y 2) (* z 3)))
-      <)))
-
-(define (generate-triples-from-seed triple)
-  (list (next-triple-a triple)
-        (next-triple-b triple)
-        (next-triple-c triple)))
-
-(define (generate-next-triples triples)
-  (apply append (map generate-triples-from-seed triples)))
+(require "pythagorean-triples.rkt")
 
 (define (count-triple-decompositions triple M)
   (let ([a (first triple)] [b (second triple)])
@@ -52,7 +19,7 @@
 
 (let loop-M ([M 100])
   (define solutions 0)
-  (let loop-triples ([triples (list '(3 4 5))])
+  (let loop-triples ([triples base-triples])
     (if (not (empty? triples))
         (begin
           (for ([triple triples])
