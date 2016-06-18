@@ -2,8 +2,11 @@
 
 ; https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples
 
+(provide base-triple)
+(define base-triple '(3 4 5))
+
 (provide base-triples)
-(define base-triples (list '(3 4 5)))
+(define base-triples (list base-triple))
 
 (provide generate-next-triples)
 (define (generate-next-triples triples)
