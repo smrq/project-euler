@@ -1,5 +1,34 @@
 #lang racket
 
+; Good solution
+
+(require math)
+
+(define (make-ten-factors max-expt)
+  (sort
+    (for*/list ([twos (in-range 0 (add1 max-expt))]
+                [fives (in-range 0 (add1 max-expt))])
+      (* (expt 2 twos) (expt 5 fives)))
+    <))
+
+(define (calculate n)
+  (let ([n10 (expt 10 n)]
+        [ten-factors (make-ten-factors n)])
+    (for*/sum ([a (in-list ten-factors)]
+               [b (in-list ten-factors)]
+               #:when (and (>= a b)
+                           (= 1 (gcd a b))))
+      (let ([p (+ (quotient n10 a)
+                  (quotient n10 b))])
+        (length (divisors p))))))
+
+(for/sum ([n (in-range 1 10)])
+  (calculate n))
+
+;--------------------------------------
+
+; Insane solution that actually worked
+
 ; n = 1 => 20
 ; n = 2 => 102
 ; n = 3 => 356
@@ -10,45 +39,45 @@
 ; n = 8 => 14088 (535.3s)
 ; n = 9 => 23058 (???s)
 
-(define (coprime-10? m)
-  (not (or (zero? (modulo m 5))
-           (zero? (modulo m 2)))))
+; (define (coprime-10? m)
+;   (not (or (zero? (modulo m 5))
+;            (zero? (modulo m 2)))))
 
-(define (make-ten-factors max-expt)
-  (sort
-    (for*/list ([twos (in-range 0 (add1 max-expt))]
-                [fives (in-range 0 (add1 max-expt))])
-      (* (expt 2 twos) (expt 5 fives)))
-    <))
+; (define (make-ten-factors max-expt)
+;   (sort
+;     (for*/list ([twos (in-range 0 (add1 max-expt))]
+;                 [fives (in-range 0 (add1 max-expt))])
+;       (* (expt 2 twos) (expt 5 fives)))
+;     <))
 
-(define (calculate n)
-  (let* ([stage-1-cutoff (sub1 (expt 2 n))]
-         [n10 (expt 10 n)]
-         [ten-factors (make-ten-factors (add1 n))]
-         [s 0]
-         [max-k (add1 n10)])
-    (define (try-k k)
-      (let ([max-a (quotient (* 2 n10) k)])
-        (for* ([a (in-list ten-factors)]
-               #:break (> a max-a)
-               [b (in-list ten-factors)]
-               #:when (<= a b))
-          (let* ([ka (* k a)]
-                 [kb (* k b)]
-                 [c (+ (/ 1 ka) (/ 1 kb))])
-            (when (zero? (modulo n10 (denominator c)))
-              (set! s (add1 s))
-              (displayln (format "~a ~a ~a || 1/~a + 1/~a = ~a" k a b ka kb c)))))))
-    (for ([k (in-range 1 (quotient n10 stage-1-cutoff))]
-          #:when (coprime-10? k))
-      (try-k k))
-    (for ([kr (in-range stage-1-cutoff 0 -1)])
-      (let ([k (add1 (quotient n10 kr))])
-        (when (coprime-10? k)
-          (try-k k))))
-    s))
+; (define (calculate n)
+;   (let* ([stage-1-cutoff (sub1 (expt 2 n))]
+;          [n10 (expt 10 n)]
+;          [ten-factors (make-ten-factors (add1 n))]
+;          [s 0]
+;          [max-k (add1 n10)])
+;     (define (try-k k)
+;       (let ([max-a (quotient (* 2 n10) k)])
+;         (for* ([a (in-list ten-factors)]
+;                #:break (> a max-a)
+;                [b (in-list ten-factors)]
+;                #:when (<= a b))
+;           (let* ([ka (* k a)]
+;                  [kb (* k b)]
+;                  [c (+ (/ 1 ka) (/ 1 kb))])
+;             (when (zero? (modulo n10 (denominator c)))
+;               (set! s (add1 s))
+;               (displayln (format "~a ~a ~a || 1/~a + 1/~a = ~a" k a b ka kb c)))))))
+;     (for ([k (in-range 1 (quotient n10 stage-1-cutoff))]
+;           #:when (coprime-10? k))
+;       (try-k k))
+;     (for ([kr (in-range stage-1-cutoff 0 -1)])
+;       (let ([k (add1 (quotient n10 kr))])
+;         (when (coprime-10? k)
+;           (try-k k))))
+;     s))
 
-(calculate 9)
+; (calculate 9)
 
 ;--------------------------------------
 
